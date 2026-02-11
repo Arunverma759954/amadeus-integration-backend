@@ -27,7 +27,7 @@ const verifyAdmin = async (req, res, next) => {
 
         // Check if user is admin
         // We check for both is_admin flag in metadata AND the specific admin email as a fallback
-        const isAdmin = user.user_metadata?.is_admin === true || user.email === 'arunverma759954@gmail.com';
+        const isAdmin = user.user_metadata?.is_admin === true || user.email === 'arunverma7599@gmail.com';
 
         if (!isAdmin) {
             return res.status(403).json({

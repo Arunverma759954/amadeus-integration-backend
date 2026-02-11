@@ -9,11 +9,11 @@ const {
 // GET /api/flights/search?origin=DEL&destination=BOM&departureDate=2023-10-25&adults=1
 router.get("/search", async (req, res, next) => {
     try {
-        const { origin, destination, departureDate, adults } = req.query;
+        const { origin, destination, departureDate, returnDate, adults } = req.query;
         if (!origin || !destination || !departureDate) {
             return res.status(400).json({ error: "Missing required query params" });
         }
-        const data = await searchFlights({ origin, destination, departureDate, adults });
+        const data = await searchFlights({ origin, destination, departureDate, returnDate, adults });
         res.json(data);
     } catch (err) {
         next(err);
@@ -23,13 +23,17 @@ router.get("/search", async (req, res, next) => {
 // POST /api/flights/search (Support body payload)
 router.post("/search", async (req, res, next) => {
     try {
-        const { origin, destination, departureDate, adults } = req.body;
+        console.log("📥 [DEBUG] POST /api/flights/search - Body:", JSON.stringify(req.body, null, 2));
+        const { origin, destination, departureDate, returnDate, adults } = req.body;
         if (!origin || !destination || !departureDate) {
+            console.warn("⚠️ [DEBUG] Missing fields in body");
             return res.status(400).json({ error: "Missing required fields in body" });
         }
-        const data = await searchFlights({ origin, destination, departureDate, adults });
+        const data = await searchFlights({ origin, destination, departureDate, returnDate, adults });
+        console.log("✅ [DEBUG] Flight search successful, returning data");
         res.json(data);
     } catch (err) {
+        console.error("❌ [DEBUG] Flight search failed:", err.message);
         next(err);
     }
 });
